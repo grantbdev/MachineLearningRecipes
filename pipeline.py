@@ -1,6 +1,10 @@
-import random
+from scipy.spatial import distance
 
 
+def euc(a, b):
+    return distance.euclidean(a, b)
+
+# K is hard-coded to 1 for now
 class ScrappyKNN():
     def fit(self, X_train, y_train):
         self.X_train = X_train
@@ -9,10 +13,20 @@ class ScrappyKNN():
     def predict(self, X_test):
         predictions = []
         for row in X_test:
-            label = random.choice(self.y_train)
+            label = self.closest(row)
             predictions.append(label)
 
         return predictions
+
+    def closest(self, row):
+        best_index = 0
+        best_dist = euc(row, self.X_train[best_index])
+        for i in range(1, len(X_train)):
+            dist = euc(row, self.X_train[i])
+            if dist < best_dist:
+                best_index = i
+                best_dist = dist
+        return self.y_train[best_index]
 
 # import a dataset
 from sklearn import datasets
